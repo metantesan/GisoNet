@@ -54,8 +54,8 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
-          cargo build --release --locked --package gisonet-ui --target aarch64-apple-darwin
-          cargo build --release --locked --package gisonet-ui --target x86_64-apple-darwin
+          cargo build --release --package gisonet-ui --target aarch64-apple-darwin
+          cargo build --release --package gisonet-ui --target x86_64-apple-darwin
           mkdir -p target/universal-apple-darwin/release
           lipo -create \
             -output target/universal-apple-darwin/release/${BIN_NAME} \
@@ -152,7 +152,7 @@ jobs:
             pkg-config
 
       - name: Build release binary
-        run: cargo build --release --locked --package gisonet-ui
+        run: cargo build --release --package gisonet-ui
 
       - name: Build tarball
         shell: bash
@@ -213,7 +213,7 @@ jobs:
             pkg-config
 
       - name: Install cargo-bundle
-        run: cargo install cargo-bundle --locked
+        run: cargo install cargo-bundle
 
       - name: Build Debian package
         shell: bash
