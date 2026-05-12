@@ -1,0 +1,27 @@
+[package]
+name = "gisonet-daemon"
+version = "0.0.1"
+edition = "2024"
+license = "BSD-3-Clause"
+
+[dependencies]
+gisonet-common = { path = "../common" }
+anyhow = "1"
+serde_json = "1"
+tokio = { version = "1", features = ["full"] }
+async-trait = "0.1"
+hickory-server = "0.26.1"
+hickory-client = "0.25"
+hickory-proto = { version = "0.26.1", features = ["tokio"] }
+actix-web = { version = "4", features = ["rustls-0_23"] }
+reqwest = { version = "0.13.3", features = ["json"] }
+rcgen = { version = "0.14.8", features = ["crypto"] }
+rustls = { version = "0.23", features = ["ring"] }
+parking_lot = "0.12"
+once_cell = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+color-eyre = "0.6"
+clap = { version = "4", features = ["derive"] }
+serde = { version = "1", features = ["derive"] }
+toml = "0.9.8"

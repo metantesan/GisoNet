@@ -1,0 +1,12 @@
+target/
+ui/target/
+.DS_Store
+*.swp
+*.swo
+*.sock
+*.pem
+*.key
+*.crt
+data/
+.env
+*.local

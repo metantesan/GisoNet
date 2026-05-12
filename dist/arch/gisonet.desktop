@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=GisoNet
+Comment=Local HTTPS development proxy
+Exec=/usr/bin/gisonet
+Icon=gisonet
+Categories=Development;Network;
+Terminal=false

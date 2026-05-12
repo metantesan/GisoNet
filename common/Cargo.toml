@@ -1,0 +1,8 @@
+[package]
+name = "gisonet-common"
+version = "0.0.1"
+edition = "2024"
+license = "BSD-3-Clause"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }

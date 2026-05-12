@@ -1,0 +1,63 @@
+# Maintainer: hikari <me@metantesan.com>
+# Contributor: metantesan
+#
+# To build locally from this repo:
+#   1. Update source to point to your git remote
+#   2. Run: makepkg -si
+#
+# Build dependencies: cargo, rust
+# Runtime dependencies: gtk3, sudo, hicolor-icon-theme
+
+pkgname=gisonet
+pkgver=0.0.1
+pkgrel=1
+pkgdesc="Local HTTPS development proxy — run local apps behind real HTTPS domains"
+arch=('x86_64')
+url="https://github.com/metantesan/gisonet"
+license=('BSD-3-Clause')
+depends=('gtk3' 'sudo' 'hicolor-icon-theme')
+makedepends=('cargo' 'rust')
+source=("$pkgname-$pkgver.tar.gz::https://github.com/metantesan/gisonet/archive/v$pkgver.tar.gz")
+sha256sums=('SKIP')
+
+prepare() {
+    cd "$srcdir/gisonet-$pkgver"
+}
+
+build() {
+    cd "$srcdir/gisonet-$pkgver"
+    cargo build --release --locked
+}
+
+check() {
+    cd "$srcdir/gisonet-$pkgver"
+    cargo test --release --locked
+}
+
+package() {
+    cd "$srcdir/gisonet-$pkgver"
+
+    # Binary (single binary serves both UI and daemon via --daemon flag)
+    install -Dm755 target/release/gisonet-ui "$pkgdir/usr/bin/gisonet"
+
+    # Icon
+    install -Dm644 assets/icon.png "$pkgdir/usr/share/icons/hicolor/1024x1024/apps/gisonet.png"
+
+    # Desktop entry
+    install -Dm644 dist/arch/gisonet.desktop "$pkgdir/usr/share/applications/gisonet.desktop"
+
+    # Systemd service for daemon mode
+    install -Dm644 dist/arch/gisonet.service "$pkgdir/usr/lib/systemd/system/gisonet.service"
+}
+
+post_install() {
+    gtk-update-icon-cache -q -t /usr/share/icons/hicolor 2>/dev/null || true
+}
+
+post_upgrade() {
+    post_install
+}
+
+post_remove() {
+    gtk-update-icon-cache -q -t /usr/share/icons/hicolor 2>/dev/null || true
+}

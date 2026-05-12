@@ -1,0 +1,32 @@
+[package]
+name = "gisonet-ui"
+version = "0.0.1"
+edition = "2024"
+license = "BSD-3-Clause"
+description = "Local HTTPS development proxy"
+
+[dependencies]
+gisonet-common = { path = "../common" }
+gisonet-daemon = { path = "../daemon" }
+gpui = "0.2.2"
+tray-menu = "0.1"
+serde_json = "1"
+anyhow = "1"
+image = { version = "0.25", default-features = false, features = ["png"] }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+tray-menu = { version = "0.1", features = ["gtk"] }
+
+[package.metadata.bundle]
+name = "GisoNet"
+identifier = "com.metantesan.gisonet"
+icon = ["../assets/icon.png"]
+category = "DeveloperTool"
+resources = []
+copyright = "Copyright (c) 2026 hikari"
+short_description = "Local HTTPS development proxy"
+long_description = """
+GisoNet is a local HTTPS proxy for development.
+It provides a desktop app, tray access, and a background daemon.
+"""
+deb_depends = ["libgtk-3-0", "libxkbcommon0", "libssl3", "policykit-1", "hicolor-icon-theme"]
