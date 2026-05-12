@@ -9,6 +9,7 @@ pub enum Request {
     GetRoutes,
     SetResolver { addr: String },
     GetStatus,
+    Stop,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

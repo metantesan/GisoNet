@@ -130,6 +130,17 @@ impl GisoNet {
         }
     }
 
+    pub(crate) fn stop_daemon(&mut self) {
+        let mut g = self.daemon.lock().unwrap();
+        if let Some(c) = g.as_mut() {
+            let c: &mut DaemonClient = c;
+            let _ = c.stop_daemon();
+        }
+        *g = None;
+        self.daemon_connected = false;
+        self.status_message = "Daemon stopped.".into();
+    }
+
     pub(crate) fn run_daemon_with_sudo(&mut self) {
         if self.daemon_connected {
             self.status_message = "Daemon is already running.".into();

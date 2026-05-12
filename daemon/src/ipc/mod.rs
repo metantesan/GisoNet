@@ -6,8 +6,9 @@ use std::fs;
 use std::os::unix::fs::PermissionsExt;
 use std::path::PathBuf;
 use tokio::net::UnixListener;
+use tokio::sync::mpsc;
 
-pub async fn run(store: SharedRoutes, socket_path: PathBuf, routes_path: PathBuf) {
+pub async fn run(store: SharedRoutes, socket_path: PathBuf, routes_path: PathBuf, stop_tx: mpsc::Sender<()>) {
     let _ = fs::remove_file(&socket_path);
 
     let listener = match UnixListener::bind(&socket_path) {
@@ -40,7 +41,8 @@ pub async fn run(store: SharedRoutes, socket_path: PathBuf, routes_path: PathBuf
                 tracing::debug!(peer = ?addr, "ipc: client connected");
                 let st = store.clone();
                 let rp = routes_path.clone();
-                tokio::spawn(async move { handle_client(stream, st, rp).await });
+                let tx = stop_tx.clone();
+                tokio::spawn(async move { handle_client(stream, st, rp, tx).await });
             }
             Err(e) => tracing::error!(%e, "ipc: accept failed"),
         }

@@ -50,11 +50,21 @@ pub fn run() -> color_eyre::Result<()> {
     let sock = cfg.socket_path.clone();
     let pid_path = cfg.pid_path.clone();
 
+    let (stop_tx, mut stop_rx) = tokio::sync::mpsc::channel::<()>(1);
+
     let rt = tokio::runtime::Runtime::new()?;
     rt.block_on(async {
-        tokio::spawn(ipc::run(routes, cfg.socket_path, routes_path));
-        tokio::signal::ctrl_c().await.ok();
-    });
+        tokio::spawn(ipc::run(routes, cfg.socket_path, routes_path, stop_tx));
+
+        let mut term = tokio::signal::unix::signal(tokio::signal::unix::SignalKind::terminate())?;
+        tokio::select! {
+            _ = tokio::signal::ctrl_c() => {}
+            _ = term.recv() => {}
+            _ = stop_rx.recv() => {}
+        }
+
+        Ok::<_, std::io::Error>(())
+    })?;
 
     tracing::info!("gisonet-daemon: shutting down...");
     let _ = fs::remove_file(&sock);

@@ -110,4 +110,12 @@ impl DaemonClient {
             _ => Err(anyhow!("unexpected response")),
         }
     }
+
+    pub fn stop_daemon(&mut self) -> Result<()> {
+        match self.send(&Request::Stop)? {
+            Response::Ok => Ok(()),
+            Response::Error { msg } => Err(anyhow!("{msg}")),
+            _ => Err(anyhow!("unexpected response")),
+        }
+    }
 }

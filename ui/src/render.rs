@@ -113,6 +113,14 @@ fn header(_this: &mut GisoNet, status_color: Rgba, status_label: SharedString, c
                                 this.run_daemon_with_sudo();
                                 cx.notify();
                             }),
+                        ))
+                        .child(btn(
+                            SharedString::from("Stop daemon"),
+                            red(),
+                            cx.listener(|this, _, _window, cx| {
+                                this.stop_daemon();
+                                cx.notify();
+                            }),
                         )),
                 ),
         )
