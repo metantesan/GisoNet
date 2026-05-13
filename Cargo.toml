@@ -1,3 +1,5 @@
 [workspace]
 resolver = "2"
 members = ["common", "daemon", "ui"]
+[workspace.package]
+version = "0.0.4"

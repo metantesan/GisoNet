@@ -26,12 +26,12 @@ prepare() {
 
 build() {
     cd "$srcdir/gisonet-$pkgver"
-    cargo build --release --locked
+    cargo build --release -j $(nproc)
 }
 
 check() {
     cd "$srcdir/gisonet-$pkgver"
-    cargo test --release --locked
+    cargo test --release
 }
 
 package() {
