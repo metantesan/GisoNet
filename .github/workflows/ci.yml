@@ -240,7 +240,10 @@ jobs:
       - name: Install build tools
         run: |
           pacman -Syu --noconfirm
-          pacman -S --noconfirm git rust cargo gtk3 sudo hicolor-icon-theme libxkbcommon libxkbcommon-x11 perl nasm
+          pacman -S --noconfirm git gtk3 sudo hicolor-icon-theme libxkbcommon libxkbcommon-x11 perl nasm lld
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
 
       - name: Checkout sources
         uses: actions/checkout@v4
