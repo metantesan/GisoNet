@@ -16,7 +16,7 @@ arch=('x86_64')
 url="https://github.com/metantesan/gisonet"
 license=('BSD-3-Clause')
 depends=('gtk3' 'sudo' 'hicolor-icon-theme')
-makedepends=('cargo' 'rust')
+makedepends=('nasm')
 source=("$pkgname-$pkgver.tar.gz::https://github.com/metantesan/gisonet/archive/v$pkgver.tar.gz")
 sha256sums=('SKIP')
 

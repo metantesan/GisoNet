@@ -240,10 +240,15 @@ jobs:
       - name: Install build tools
         run: |
           pacman -Syu --noconfirm
-          pacman -S --noconfirm git gtk3 sudo hicolor-icon-theme libxkbcommon libxkbcommon-x11 perl nasm lld
+          pacman -S --noconfirm git gtk3 sudo hicolor-icon-theme libxkbcommon libxkbcommon-x11 perl nasm lld curl ca-certificates
 
       - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
+        run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable
+        shell: bash
+
+      - name: Add Rust to PATH
+        run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+        shell: bash
 
       - name: Checkout sources
         uses: actions/checkout@v4
