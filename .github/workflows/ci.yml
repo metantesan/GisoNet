@@ -54,8 +54,8 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
-          cargo build --release -j $(nproc) --package gisonet-ui --target aarch64-apple-darwin
-          cargo build --release -j $(nproc) --package gisonet-ui --target x86_64-apple-darwin
+          cargo build --release -j $(sysctl -n hw.ncpu) --package gisonet-ui --target aarch64-apple-darwin
+          cargo build --release -j $(sysctl -n hw.ncpu) --package gisonet-ui --target x86_64-apple-darwin
           mkdir -p target/universal-apple-darwin/release
           lipo -create \
             -output target/universal-apple-darwin/release/${BIN_NAME} \
