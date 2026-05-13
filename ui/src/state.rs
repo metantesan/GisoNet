@@ -141,7 +141,7 @@ impl GisoNet {
         self.status_message = "Daemon stopped.".into();
     }
 
-    pub(crate) fn run_daemon_with_sudo(&mut self) {
+    pub(crate) fn run_daemon(&mut self) {
         if self.daemon_connected {
             self.status_message = "Daemon is already running.".into();
             return;
@@ -150,40 +150,15 @@ impl GisoNet {
         let exe = std::env::current_exe().ok();
         let daemon = exe.as_deref().unwrap_or_else(|| std::path::Path::new("gisonet"));
 
-        #[cfg(target_os = "linux")]
-        {
-            match std::process::Command::new("pkexec").arg(daemon).arg("--daemon").spawn() {
-                Ok(_) => {
-                    self.status_message = "Daemon launching via pkexec...".into();
-                    std::thread::sleep(Duration::from_millis(500));
-                    self.poll_daemon();
-                }
-                Err(e) => {
-                    self.status_message = format!(
-                        "Could not launch daemon: {e}. Try 'sudo systemctl enable --now gisonet'."
-                    );
-                }
+        match std::process::Command::new(daemon).arg("--daemon").spawn() {
+            Ok(_) => {
+                self.status_message = "Daemon launching\u{2026}".into();
+                std::thread::sleep(Duration::from_millis(500));
+                self.poll_daemon();
             }
-        }
-
-        #[cfg(target_os = "macos")]
-        {
-            match std::process::Command::new("sudo").arg("-b").arg(daemon).arg("--daemon").spawn() {
-                Ok(_) => {
-                    self.status_message = "Daemon launching via sudo...".into();
-                    std::thread::sleep(Duration::from_millis(500));
-                    self.poll_daemon();
-                }
-                Err(e) => {
-                    self.status_message = format!("Could not launch daemon: {e}");
-                }
+            Err(e) => {
+                self.status_message = format!("Could not launch daemon: {e}");
             }
-        }
-
-        #[cfg(windows)]
-        {
-            let _ = daemon;
-            self.status_message = "Run 'gisonet --daemon' from an elevated terminal.".into();
         }
     }
 

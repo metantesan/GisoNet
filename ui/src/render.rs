@@ -110,7 +110,7 @@ fn header(_this: &mut GisoNet, status_color: Rgba, status_label: SharedString, c
                             SharedString::from("Start daemon"),
                             green(),
                             cx.listener(|this, _, _window, cx| {
-                                this.run_daemon_with_sudo();
+                                this.run_daemon();
                                 cx.notify();
                             }),
                         ))
@@ -225,10 +225,10 @@ fn resolver_section(this: &mut GisoNet, cx: &mut Context<GisoNet>) -> impl IntoE
                     }),
                 ))
                 .child(btn(
-                    SharedString::from("Run daemon (sudo)"),
+                    SharedString::from("Run daemon"),
                     overlay(),
                     cx.listener(|this, _, _window, cx| {
-                        this.run_daemon_with_sudo();
+                        this.run_daemon();
                         cx.notify();
                     }),
                 )),
